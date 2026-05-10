@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVE Research — Information Relativity</title>
+<meta name="description" content="Emergent Vacuum Energy Research. Deriving dark energy, gravity, and quantum behavior from information-processing principles.">
+<style>
+/* ============================================================
+   EVE Research — everesearch.org
+   Design: Jeff Vermeire's Visual Design Philosophy
+   Palette: 3-tier (ground / content / signal)
+   Layout: Left sidebar, F-pattern optimized
+   Typography: Georgia serif body, system sans UI
+   Built: March 30, 2026
+   ============================================================ */
+
+/* --- CSS Variables (single source of truth) --- */
+:root {
+  /* Ground tier (60-70%) — deep navy */
+  --ground-deep:    #060e1a;
+  --ground-base:    #0a1628;
+  --ground-raised:  #0f1f38;
+  --ground-surface: #152848;
+
+  /* Content tier (20-30%) — warm parchment */
+  --content-primary:   #e0d5c1;
+  --content-secondary: #b8a88a;
+  --content-tertiary:  #8a7d6b;
+  --content-dim:       #5a5248;
+
+  /* Signal tier (5-10%) — warm gold */
+  --signal-gold:       #c9a227;
+  --signal-gold-dim:   rgba(201, 162, 39, 0.15);
+  --signal-gold-hover: #dbb534;
+
+  /* Semantic (reserved — never decorative) */
+  --semantic-error:   #c0392b;
+  --semantic-warning: #d4830a;
+  --semantic-success: #27ae60;
+
+  /* Typography */
+  --font-body: 'Georgia', 'Times New Roman', serif;
+  --font-ui:   -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  --text-base:  17px;
+  --line-height: 1.62;
+  --content-max: 700px;
+
+  /* Spacing scale (Weber-compliant ratios) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* System */
+  --radius: 4px;
+  --sidebar-width: 220px;
+  --transition: 150ms ease;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* --- Base --- */
+html {
+  font-size: var(--text-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: var(--line-height);
+  color: var(--content-primary);
+  background: var(--ground-deep);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* --- Sidebar (persistent, left, always visible) --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--ground-base);
+  border-right: 1px solid var(--ground-surface);
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-6) 0;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  padding: 0 var(--sp-5);
+  margin-bottom: var(--sp-7);
+}
+
+.sidebar-brand h1 {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--signal-gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-1);
+}
+
+.sidebar-brand .tagline {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--content-tertiary);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.sidebar-nav {
+  list-style: none;
+  flex: 1;
+}
+
+.sidebar-nav li {
+  margin-bottom: var(--sp-1);
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: var(--sp-3) var(--sp-5);
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  color: var(--content-secondary);
+  text-decoration: none;
+  transition: color var(--transition), background var(--transition);
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  color: var(--content-primary);
+  background: var(--ground-raised);
+}
+
+.sidebar-nav a.active {
+  color: var(--signal-gold);
+  border-left-color: var(--signal-gold);
+  background: var(--signal-gold-dim);
+}
+
+.sidebar-footer {
+  padding: var(--sp-5);
+  border-top: 1px solid var(--ground-surface);
+  margin-top: auto;
+}
+
+.sidebar-footer p {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--content-dim);
+  line-height: 1.5;
+}
+
+/* --- Main content area --- */
+.main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-height: 100vh;
+}
+
+.page {
+  display: none;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-8) var(--sp-6);
+}
+
+.page.active {
+  display: block;
+}
+
+/* --- Typography --- */
+h2 {
+  font-family: var(--font-body);
+  font-size: 1.65rem;
+  font-weight: normal;
+  color: var(--content-primary);
+  margin-bottom: var(--sp-5);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--ground-surface);
+}
+
+h3 {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--signal-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: var(--sp-7);
+  margin-bottom: var(--sp-4);
+}
+
+p {
+  margin-bottom: var(--sp-4);
+  color: var(--content-primary);
+}
+
+p.secondary {
+  color: var(--content-secondary);
+}
+
+a {
+  color: var(--signal-gold);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--signal-gold-hover);
+}
+
+/* --- Home page hero --- */
+.hero {
+  margin-bottom: var(--sp-8);
+}
+
+.hero-title {
+  font-family: var(--font-body);
+  font-size: 2.2rem;
+  font-weight: normal;
+  color: var(--content-primary);
+  line-height: 1.25;
+  margin-bottom: var(--sp-4);
+}
+
+.hero-title em {
+  color: var(--signal-gold);
+  font-style: normal;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--content-secondary);
+  line-height: var(--line-height);
+  max-width: 580px;
+}
+
+.core-result {
+  background: var(--ground-raised);
+  border: 1px solid var(--ground-surface);
+  border-left: 3px solid var(--signal-gold);
+  border-radius: var(--radius);
+  padding: var(--sp-5) var(--sp-6);
+  margin: var(--sp-7) 0;
+}
+
+.core-result .equation {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--signal-gold);
+  text-align: center;
+  margin: var(--sp-4) 0;
+  letter-spacing: 0.02em;
+}
+
+.core-result .caption {
+  font-size: 0.88rem;
+  color: var(--content-secondary);
+  text-align: center;
+  margin-top: var(--sp-3);
+}
+
+/* --- Card grid (papers & tools) --- */
+.card-group {
+  margin-bottom: var(--sp-7);
+}
+
+.card {
+  background: var(--ground-raised);
+  border: 1px solid var(--ground-surface);
+  border-radius: var(--radius);
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-4);
+  transition: border-color var(--transition);
+}
+
+.card:hover {
+  border-color: var(--signal-gold);
+}
+
+.card-title {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--content-primary);
+  margin-bottom: var(--sp-2);
+}
+
+.card-title a {
+  color: var(--content-primary);
+}
+
+.card-title a:hover {
+  color: var(--signal-gold);
+}
+
+.card-meta {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--content-tertiary);
+  margin-bottom: var(--sp-3);
+}
+
+.card-desc {
+  font-size: 0.88rem;
+  color: var(--content-secondary);
+  line-height: 1.55;
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  color: var(--signal-gold);
+  background: var(--signal-gold-dim);
+  padding: 2px var(--sp-2);
+  border-radius: var(--radius);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: var(--sp-2);
+}
+
+/* --- About page --- */
+.about-section {
+  margin-bottom: var(--sp-7);
+}
+
+.about-section p {
+  font-size: 0.95rem;
+}
+
+.contact-line {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  color: var(--content-secondary);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--ground-surface);
+}
+
+.contact-line:last-child {
+  border-bottom: none;
+}
+
+.contact-label {
+  color: var(--content-tertiary);
+  display: inline-block;
+  width: 80px;
+}
+
+/* --- Utility --- */
+.divider {
+  border: none;
+  border-top: 1px solid var(--ground-surface);
+  margin: var(--sp-7) 0;
+}
+
+/* --- Mobile: sidebar collapses to top bar --- */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: var(--sp-3) var(--sp-4);
+    border-right: none;
+    border-bottom: 1px solid var(--ground-surface);
+    overflow-x: auto;
+  }
+
+  .sidebar-brand {
+    margin-bottom: 0;
+    margin-right: var(--sp-5);
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .sidebar-brand .tagline {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .sidebar-nav li {
+    margin-bottom: 0;
+  }
+
+  .sidebar-nav a {
+    padding: var(--sp-2) var(--sp-3);
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+
+  .sidebar-nav a.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--signal-gold);
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .main {
+    margin-left: 0;
+    margin-top: 56px;
+  }
+
+  .page {
+    padding: var(--sp-6) var(--sp-4);
+  }
+
+  .hero-title {
+    font-size: 1.65rem;
+  }
+}
+</style>
+
+<!-- MathJax for any equations -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<!-- ============ SIDEBAR ============ -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <h1>EVE Research</h1>
+    <div class="tagline">Emergent Vacuum Energy</div>
+  </div>
+
+  <ul class="sidebar-nav">
+    <li><a href="#home" class="active" data-page="home">Home</a></li>
+    <li><a href="#papers" data-page="papers">Papers</a></li>
+    <li><a href="#tools" data-page="tools">Tools</a></li>
+    <li><a href="#about" data-page="about">About</a></li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <p>J. Vermeire<br>Independent Research<br>&copy; 2026</p>
+  </div>
+</nav>
+
+<!-- ============ MAIN CONTENT ============ -->
+<main class="main">
+
+  <!-- ———— HOME ———— -->
+  <section id="home" class="page active">
+    <div class="hero">
+      <h2 class="hero-title">The universe pays for its own existence.<br>The receipt is <em>dark energy</em>.</h2>
+      <p class="hero-subtitle">
+        Information Relativity derives the critical density of the universe from three established results — Bekenstein-Hawking entropy, Gibbons-Hawking temperature, and Landauer's principle — with zero free parameters.
+      </p>
+    </div>
+
+    <div class="core-result">
+      <div class="equation">
+        $\displaystyle \frac{S \cdot T}{V} = \frac{3H^2 c^2}{8\pi G} = \rho_{\text{crit}}$
+      </div>
+      <div class="caption">
+        The Landauer energy cost of the Hubble horizon's information content, divided by enclosed volume, equals the Friedmann critical density exactly. Only $c$, $G$, and $H$ remain — $\hbar$ and $k_B$ cancel entirely.
+      </div>
+    </div>
+
+    <h3>The Argument</h3>
+    <p>
+      Every causal horizon carries entropy proportional to its area and radiates at a temperature set by the expansion rate. The energy required to maintain that information — the Landauer cost — is real, gravitating energy. Divide it by the volume the horizon encloses, and you get the critical density that governs cosmic expansion.
+    </p>
+    <p>
+      This is not a coincidence, an approximation, or a fit. It is an algebraic identity that holds for any value of $H$. Dark energy is the thermodynamic cost of the universe's causal boundary.
+    </p>
+
+    <h3>What This Completes</h3>
+    <p>
+      Ted Jacobson showed in 1995 that Einstein's field equations emerge from local thermodynamics at causal horizons — heat crossing a horizon is equivalent to spacetime curvature. His derivation leaves the cosmological constant undetermined. Information Relativity supplies the global integral form: $\Lambda = 3H^2/c^2$, fixed exactly. Together, the local differential and global integral forms recover all of general relativity from thermodynamics alone.
+    </p>
+    <p class="secondary">
+      Analogous to Maxwell's equations: Jacobson gives the differential form, IR gives the integral form. Neither is complete without the other.
+    </p>
+
+    <hr class="divider">
+
+    <h3>Current Status</h3>
+    <p>
+      The paper "On the Origin of Dark Energy" is in preparation for submission to <em>Foundations of Physics</em>. Interactive walkthroughs, annotated literature, and the derivation chain are available in the <a href="#tools" data-page="tools">Tools</a> and <a href="#papers" data-page="papers">Papers</a> sections.
+    </p>
+  </section>
+
+  <!-- ———— PAPERS ———— -->
+  <section id="papers" class="page">
+    <h2>Papers &amp; Documents</h2>
+    <p class="secondary">Research documents, annotated literature, and reference materials. Core paper documents listed first, followed by annotated source papers and supporting references.</p>
+
+    <h3>Core Paper</h3>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-title"><a href="papers/vermeire_dark_energy_2026.pdf">On the Origin of Dark Energy</a></div>
+        <div class="card-meta"><span class="tag">In Preparation</span> J. Vermeire, 2026 &middot; Target: Foundations of Physics</div>
+        <div class="card-desc">Derives the Friedmann critical density as the Landauer energy cost of the Hubble horizon's Bekenstein-Hawking entropy at the Gibbons-Hawking temperature. Zero free parameters. Completes Jacobson's 1995 thermodynamic derivation of GR by fixing the cosmological constant.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Paper_Outline_v15.pdf">Paper Outline v15</a></div>
+        <div class="card-meta"><span class="tag">Working Draft</span> March 30, 2026</div>
+        <div class="card-desc">Current structural outline — 13 sections, ~8,500 words. Includes the Jacobson connection as climax, DESI equilibrium attractor prediction, and surface energy interpretation.</div>
+      </div>
+    </div>
+
+    <h3>Two-Column Annotated Papers</h3>
+    <p class="secondary">Original source text on the left, clear rewrite with IR annotations on the right.</p>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-title"><a href="papers/Bekenstein_1973_Two_Column.pdf">Bekenstein 1973 — Black Holes and Entropy</a></div>
+        <div class="card-meta">Annotated March 7, 2026</div>
+        <div class="card-desc">Establishes $S = A / 4\ell_P^2$. The first ingredient in the IR derivation.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Gibbons_Hawking_1977_Two_Column.pdf">Gibbons &amp; Hawking 1977 — Cosmological Event Horizons</a></div>
+        <div class="card-meta">Annotated March 7, 2026</div>
+        <div class="card-desc">Establishes $T = \hbar H / 2\pi k_B$. The second ingredient. Extends Hawking radiation to cosmological horizons.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Jacobson_1995_Two_Column.pdf">Jacobson 1995 — Thermodynamics of Spacetime</a></div>
+        <div class="card-meta">Annotated March 7, 2026</div>
+        <div class="card-desc">Derives Einstein's field equations from $\delta Q = T \, dS$ at local causal horizons. IR supplies the global complement: $Q = TS \Rightarrow \Lambda$.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Jacobson_2015_Two_Column.pdf">Jacobson 2015 — Entanglement Equilibrium</a></div>
+        <div class="card-meta">Annotated March 16, 2026</div>
+        <div class="card-desc">Updates and refines the 1995 thermodynamic gravity program using entanglement entropy.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Cohen_Kaplan_Nelson_1999_Two_Column.pdf">Cohen, Kaplan &amp; Nelson 1999 — UV/IR Connection</a></div>
+        <div class="card-meta">Annotated March 24, 2026</div>
+        <div class="card-desc">Established the right scaling $\rho \sim H^2 M_P^2$ but not the exact coefficient, equation of state, or mechanism. IR supplies all three.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Lee_Lee_Kim_2008_Two_Column.pdf">Lee, Lee &amp; Kim 2007 — Holographic Dark Energy</a></div>
+        <div class="card-meta">Annotated March 16, 2026</div>
+        <div class="card-desc">Had all three ingredients but embedded them in holographic dark energy with a free parameter $d$. Never computed $ST/V$ directly.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Trivedi_2024_Two_Column.pdf">Trivedi 2024 — Landauer Bound at Cosmological Horizons</a></div>
+        <div class="card-meta">Annotated March 24, 2026</div>
+        <div class="card-desc">Same three ingredients, per-bit approach using Misner-Sharp energy. Factor-of-2 discrepancy. IR's boundary-only approach ($S \times T$, no bulk energy) gives exact match.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Komatsu_2024_Two_Column.pdf">Komatsu 2024 — Helmholtz Free Energy</a></div>
+        <div class="card-meta">Annotated March 14, 2026</div>
+        <div class="card-desc">Independent confirmation via Helmholtz free energy and equipartition. Maps the dynamic approach to IR's de Sitter attractor.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Padmanabhan_2012_Two_Column.pdf">Padmanabhan 2012 — Holographic Equipartition</a></div>
+        <div class="card-meta">Annotated March 14, 2026</div>
+        <div class="card-desc">Cosmic expansion as the drive toward holographic equipartition of surface and bulk degrees of freedom.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Yusofi_2022_Two_Column.pdf">Yusofi 2022 — Surface Tension and Dark Energy</a></div>
+        <div class="card-meta">Annotated March 30, 2026</div>
+        <div class="card-desc">Surface tension of cosmological horizons in de Sitter space.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Riemann_1859_Two_Column.pdf">Riemann 1859 — On the Number of Primes</a></div>
+        <div class="card-meta">Annotated 2026</div>
+        <div class="card-desc">The original paper on the zeta function, annotated for connections to information geometry.</div>
+      </div>
+    </div>
+
+    <h3>Reference Documents</h3>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-title"><a href="papers/Friedmann_Walkthrough.pdf">Friedmann Equations Walkthrough</a></div>
+        <div class="card-meta">February 25, 2026</div>
+        <div class="card-desc">Step-by-step derivation of the Friedmann equations with physical interpretation at every step.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="papers/Information_Relativity_Bible_v5.pdf">Information Relativity Bible v5.0</a></div>
+        <div class="card-meta">Master reference document</div>
+        <div class="card-desc">Complete framework reference — rules, mechanisms, translations, appendices. 14,437 lines.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———— TOOLS ———— -->
+  <section id="tools" class="page">
+    <h2>Interactive Tools</h2>
+    <p class="secondary">Self-contained walkthroughs with MathJax equations, step-by-step derivations, and physical interpretations. Each opens as a standalone page.</p>
+
+    <h3>Core Derivation Chain</h3>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-title"><a href="tools/Szilard_to_Critical_Density_Walkthrough.html">Szilard Engine to Critical Density</a></div>
+        <div class="card-meta"><span class="tag">Walkthrough</span> March 19, 2026</div>
+        <div class="card-desc">The complete derivation path: from a single-bit Szilard engine through Bekenstein-Hawking entropy and Gibbons-Hawking temperature to $\rho_{\text{crit}}$. Every algebraic step shown.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/From_Entropy_to_Dark_Energy.html">From Entropy to Dark Energy</a></div>
+        <div class="card-meta"><span class="tag">Walkthrough</span> March 12, 2026</div>
+        <div class="card-desc">The narrative arc of the derivation — how horizon entropy, horizon temperature, and erasure cost combine to produce dark energy.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/Partition_Function_Walkthrough.html">Partition Function Walkthrough</a></div>
+        <div class="card-meta"><span class="tag">Walkthrough</span> March 22, 2026</div>
+        <div class="card-desc">Statistical mechanics foundations — how the partition function connects to the thermodynamic quantities used in the IR derivation.</div>
+      </div>
+    </div>
+
+    <h3>Surface Energy &amp; Horizon Thermodynamics</h3>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-title"><a href="tools/Dark_Energy_as_Surface_Energy.html">Dark Energy as Surface Energy</a></div>
+        <div class="card-meta"><span class="tag">Walkthrough</span> March 29, 2026</div>
+        <div class="card-desc">The dual conjugate pair structure: thermal pair ($T \times S$) and surface pair ($\gamma \times A$) give identical energies. Dark energy is surface energy projected into the bulk volume.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/Surface_Tension_Constraint_Network.html">Surface Tension Constraint Network</a></div>
+        <div class="card-meta"><span class="tag">Interactive</span> March 30, 2026</div>
+        <div class="card-desc">Mapping the constraint relationships between horizon surface tension, Landauer costs, and the Friedmann equations.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/Raindrop_Lifecycle_Landauer.html">Raindrop Lifecycle &amp; Landauer Costs</a></div>
+        <div class="card-meta"><span class="tag">Interactive</span> March 30, 2026</div>
+        <div class="card-desc">The raindrop analogy: single surface, different phases on each side, forms spontaneously. The correct analog for the Hubble horizon — not a soap bubble.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/UV_IR_Connection_Laplace_Pressure.html">UV/IR Connection &amp; Laplace Pressure</a></div>
+        <div class="card-meta"><span class="tag">Walkthrough</span> March 30, 2026</div>
+        <div class="card-desc">How the UV/IR connection manifests as Laplace pressure across the Hubble horizon.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/Planck_Cell_Writeup.html">Planck Cell Writeup</a></div>
+        <div class="card-meta"><span class="tag">Reference</span> March 14, 2026</div>
+        <div class="card-desc">The minimum cell of spacetime — Planck area as the fundamental unit of horizon information.</div>
+      </div>
+    </div>
+
+    <h3>Pedagogy &amp; Visualization</h3>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-title"><a href="tools/Alice_Bob_Heat_Bends_Space.html">Alice &amp; Bob: Heat Bends Space</a></div>
+        <div class="card-meta"><span class="tag">Explainer</span> March 12, 2026</div>
+        <div class="card-desc">A dialogue-style walkthrough of Jacobson's insight — how heat flux across a causal horizon is equivalent to spacetime curvature.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/Landauer_Viscosity.html">Landauer Viscosity</a></div>
+        <div class="card-meta"><span class="tag">Walkthrough</span> March 22, 2026</div>
+        <div class="card-desc">Information erasure as a source of effective viscosity in cosmological dynamics.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><a href="tools/Holographic_Template_v2.html">Holographic Template v2</a></div>
+        <div class="card-meta"><span class="tag">Reference</span> March 1, 2026</div>
+        <div class="card-desc">The holographic principle applied to the IR framework — how boundary information encodes bulk physics.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———— ABOUT ———— -->
+  <section id="about" class="page">
+    <h2>About</h2>
+
+    <div class="about-section">
+      <h3>The Researcher</h3>
+      <p>
+        Jeff Vermeire is an independent theoretical physics researcher developing Information Relativity — a framework that derives quantum behavior, gravity, and cosmological phenomena from information-processing principles.
+      </p>
+      <p>
+        The work began in June 2025, originating from questions about helium-3 spin coherence in polarized target experiments. The central insight — that the Landauer energy cost of maintaining information at a causal horizon exactly produces the observed dark energy density — emerged through six months of systematic development.
+      </p>
+    </div>
+
+    <div class="about-section">
+      <h3>The Framework</h3>
+      <p>
+        Information Relativity builds on established physics: Bekenstein-Hawking entropy (1973), Gibbons-Hawking temperature (1977), Landauer's principle (1961), and Jacobson's thermodynamic derivation of gravity (1995). The contribution is recognizing that these four results, combined without additional assumptions or free parameters, produce the Friedmann critical density exactly.
+      </p>
+      <p>
+        The framework treats the Hubble horizon as a causal thermal one-way membrane. Energy crossing a causal horizon is heat by definition (Jacobson's insight). The total heat content is the Landauer cost of the horizon's information. Dividing by the enclosed volume yields a density — and that density is the critical density that governs cosmic expansion.
+      </p>
+    </div>
+
+    <div class="about-section">
+      <h3>Acknowledgments</h3>
+      <p>
+        Brian Mederos (Jefferson Lab) for ongoing discussions on polarized helium-3 experiments and the physical intuitions that seeded the framework.
+      </p>
+    </div>
+
+    <div class="about-section">
+      <h3>Contact</h3>
+      <div class="contact-line">
+        <span class="contact-label">Email</span>
+        <a href="mailto:jeff@everesearch.org">jeff@everesearch.org</a>
+      </div>
+      <div class="contact-line">
+        <span class="contact-label">Site</span>
+        <a href="https://everesearch.org">everesearch.org</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ NAVIGATION LOGIC ============ -->
+<script>
+(function() {
+  const links = document.querySelectorAll('.sidebar-nav a');
+  const pages = document.querySelectorAll('.page');
+
+  function navigate(pageId) {
+    // Update active page
+    pages.forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(pageId);
+    if (target) target.classList.add('active');
+
+    // Update active nav link
+    links.forEach(l => l.classList.remove('active'));
+    const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+    if (activeLink) activeLink.classList.add('active');
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }
+
+  // Handle nav clicks
+  links.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const pageId = this.getAttribute('data-page');
+      history.pushState(null, '', '#' + pageId);
+      navigate(pageId);
+    });
+  });
+
+  // Handle in-page links to other sections
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('a[data-page]');
+    if (link && !link.closest('.sidebar-nav')) {
+      e.preventDefault();
+      const pageId = link.getAttribute('data-page');
+      history.pushState(null, '', '#' + pageId);
+      navigate(pageId);
+    }
+  });
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', function() {
+    const hash = location.hash.replace('#', '') || 'home';
+    navigate(hash);
+  });
+
+  // Handle initial load
+  const initialPage = location.hash.replace('#', '') || 'home';
+  navigate(initialPage);
+})();
+</script>
+
+</body>
+</html>
